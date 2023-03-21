@@ -1,4 +1,6 @@
-const { addStoryService, getStoryServices, getAllStoryServices } = require("../service/storyService")
+const { Story } = require("../database/connection")
+const { pagination } = require("../pagination")
+const { addStoryService, getStoryServices, getAllStoryServices, getNextService } = require("../service/storyService")
 
 module.exports.addStoryData=async(req,res,next)=>{
     const {image,text,appLogo}=req.body
@@ -8,9 +10,19 @@ module.exports.addStoryData=async(req,res,next)=>{
 }
 
 module.exports.getStoryData=async(req,res,next)=>{
-    const result=await getStoryServices()
-    if(result.success) return res.status(200).json({data:result})
-    return res.status(404).json({data:result})
+    const pageNumber=req.query.page
+    const sizeNumber=req.query.size
+    if(!pageNumber || !sizeNumber){
+
+        const result=await getStoryServices()
+        if(result.success) return res.status(200).json({data:result})
+        return res.status(404).json({data:result})
+    }else{
+        const {page,size}=pagination(pageNumber,sizeNumber)
+        const result=await Story.findAndCountAll({limit:size,offset:page*size})
+        if(result) return res.status(200).json({data:result})
+        return res.status(404).json({data:result})
+    }
 }
 
 module.exports.getAllStoryData=async(req,res,next)=>{
@@ -18,3 +30,5 @@ module.exports.getAllStoryData=async(req,res,next)=>{
     if(result.success) return res.status(200).json({data:result})
     return res.status(404).json({data:result})
 }
+
+

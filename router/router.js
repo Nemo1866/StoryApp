@@ -1,5 +1,5 @@
 const passport = require("passport")
-const { addStoryData, getStoryData, getAllStoryData } = require("../controller/storyController")
+const { addStoryData, getStoryData, getAllStoryData, getNextData } = require("../controller/storyController")
 const { registerUserData, loginUserData, resetPasswordData, changePasswordData, logoutData } = require("../controller/userController")
 
 const router=require("express").Router()
@@ -14,5 +14,6 @@ router.get("/logout",logoutData)
 router.post("/addStory",addStoryData)
 router.get("/getStory",getStoryData)
 router.get("/readmore",getAllStoryData)
+
 
 module.exports=router

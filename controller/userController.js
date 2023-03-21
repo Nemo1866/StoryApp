@@ -10,7 +10,9 @@ module.exports.registerUserData=async(req,res,next)=>{
 }
 
 module.exports.loginUserData=async(req,res,next)=>{
-    const result=await Story.findAll({attributes:["image","text","appLogo"]})
+    const result=await Story.findOne({attributes:["image","text","appLogo"]})
+    
+   
     if(result) return res.status(200).json({data:result})
     return res.status(400).json({data:"Not Logged In"})
 }
